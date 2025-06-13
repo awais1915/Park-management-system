@@ -1,0 +1,101 @@
+CREATE DATABASE PARKING_MANAGEMENT_DATABASE;
+USE PARKING_MANAGEMENT_DATABASE;
+-- Create register table
+CREATE TABLE register (
+    Reg_ID INT(11) NOT NULL AUTO_INCREMENT,
+    User_Name VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) NOT NULL,
+    Password VARCHAR(50) NOT NULL,
+    PRIMARY KEY (Reg_ID),
+    UNIQUE KEY (Email)
+);
+
+-- Create register_admin table
+CREATE TABLE register_admin (
+    ID INT(11) NOT NULL AUTO_INCREMENT,
+    Name VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) NOT NULL,
+    Password VARCHAR(50) NOT NULL,
+    Contact_No VARCHAR(15) NOT NULL,
+    PRIMARY KEY (ID),
+    UNIQUE KEY (Email)
+);
+
+-- Create user table
+CREATE TABLE user (
+    User_ID INT(11) NOT NULL AUTO_INCREMENT,
+    Name VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) NOT NULL,
+    Password VARCHAR(50) NOT NULL,
+    Age INT(11) NOT NULL,
+    Contact_Number VARCHAR(15) NOT NULL,
+    PRIMARY KEY (User_ID),
+    UNIQUE KEY (Email)
+);
+
+-- Create vehicle table
+CREATE TABLE vehicle (
+    Vehicle_ID INT(11) NOT NULL AUTO_INCREMENT,
+    Make VARCHAR(50) DEFAULT NULL,
+    Color VARCHAR(20) DEFAULT NULL,
+    Vehicle_Number VARCHAR(17) DEFAULT NULL,
+    Vehicle_Type VARCHAR(50) DEFAULT NULL,
+    Status VARCHAR(10) NOT NULL,
+    User_ID INT(11) DEFAULT NULL,
+    Slot_ID INT(11) DEFAULT NULL,
+    PRIMARY KEY (Vehicle_ID),
+    KEY (User_ID),
+    KEY (Slot_ID)
+);
+
+-- Create booking table
+CREATE TABLE booking (
+    Booking_ID INT(11) NOT NULL AUTO_INCREMENT,
+    User_ID INT(11) NOT NULL,
+    Slot_ID INT(11) NOT NULL,
+    Entry_Time TIME NOT NULL,
+    Exit_Time TIME DEFAULT NULL,
+    Vehicle_ID INT(11) DEFAULT NULL,
+    Status ENUM('Paid', 'UnPaid') DEFAULT 'UnPaid',
+    PRIMARY KEY (Booking_ID),
+    KEY (User_ID),
+    KEY (Slot_ID),
+    KEY (Vehicle_ID)
+);
+
+-- Create parking_fee table
+CREATE TABLE parking_fee (
+    Vehicle_Type VARCHAR(50) NOT NULL,
+    Fee INT(11) NOT NULL,
+    PRIMARY KEY (Vehicle_Type)
+);
+
+-- Create parking_slot table
+CREATE TABLE parking_slot (
+    Slot_ID INT(11) NOT NULL AUTO_INCREMENT,
+    Slot_Status ENUM('Vacant', 'Occupied') NOT NULL,
+    Vehicle_Number VARCHAR(15) DEFAULT NULL,
+    Status VARCHAR(50) DEFAULT NULL,
+    PRIMARY KEY (Slot_ID)
+);
+
+-- Create payment table
+CREATE TABLE payment (
+    Payment_ID INT(11) NOT NULL AUTO_INCREMENT,
+    Booking_ID INT(11) NOT NULL,
+    User_ID INT(11) NOT NULL,
+    Amount DOUBLE(10,2) NOT NULL,
+    Payment_Date DATE NOT NULL,
+    Vehicle_ID INT(11) DEFAULT NULL,
+    PRIMARY KEY (Payment_ID),
+    KEY (Booking_ID),
+    KEY (User_ID),
+    KEY (Vehicle_ID)
+);
+-- Creating Admin
+INSERT INTO register_admin (Name, Email, Password, Contact_No)
+VALUES ('Admin Name', 'admin@example.com', 'securepassword', '0311-1111111');
+-- Setting Parking Fee First Time
+insert into parking_fee(Vehicle_Type,Fee)values('Large',500);
+insert into parking_fee(Vehicle_Type,Fee)values('Compact',350);
+insert into parking_fee(Vehicle_Type,Fee)values('Bike',150);
